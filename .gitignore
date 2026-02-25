@@ -1,5 +1,8 @@
 # Virtual Environment
 newenv/
+venv/
+env/
+.venv/
 
 # Datasets & Generated Data
 datasets/
@@ -9,22 +12,37 @@ processed_frames/
 extracted_frames/
 uploads/
 
-# Large files
-*.npy
-*.pth
-*.pt
-
-# Python cache
-__pycache__/
-*.pyc
-static/reports/
-*.pdf
 # Model weights
 *.h5
+*.pth
+*.pt
 *.caffemodel
 models/
 model/
 
-# Output videos
+# Output files
 *.mp4
 static/results/
+static/reports/
+*.pdf
+
+# Large numpy files
+*.npy
+
+# Python cache
+__pycache__/
+*.pyc
+*$py.class
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE files
+.vscode/
+.idea/
