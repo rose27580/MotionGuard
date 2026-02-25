@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MotionGuard | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">🛡 MotionGuard</div>
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/upload-page">Upload</a></li>
+        
+    </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <h1>AI Powered Smart Surveillance</h1>
+    <p>Real-time motion detection with intelligent threat analysis and automatic evidence logging.</p>
+
+    <a href="/upload-page" class="btn">🎥 Get Started</a>
+
+    <div style="margin-top:20px; font-size:18px;">
+        {% if latest_threat == "HIGH" %}
+            <span style="color:red; font-weight:bold;">🔴 ALERT ACTIVE</span>
+        {% else %}
+            <span style="color:#38bdf8; font-weight:bold;">🟢 SYSTEM ONLINE</span>
+        {% endif %}
+    </div>
+</section>
+
+<!-- STATS SECTION -->
+<section class="about">
+    <h2>System Overview</h2>
+
+    <div style="display:flex; justify-content:center; gap:40px; flex-wrap:wrap; margin-top:30px;">
+        <div>
+            <h3>{{ total }}</h3>
+            <p>Total Incidents</p>
+        </div>
+
+        <div>
+            <h3 style="color:red;">{{ high }}</h3>
+            <p>High Threat</p>
+        </div>
+
+        <div>
+            <h3 style="color:orange;">{{ medium }}</h3>
+            <p>Medium Threat</p>
+        </div>
+
+        <div>
+            <h3 style="color:green;">{{ low }}</h3>
+            <p>Low Threat</p>
+        </div>
+    </div>
+</section>
+
+<!-- LATEST SCREENSHOTS -->
+
+
+<!-- ABOUT -->
+<section class="how-it-works">
+    <h2>How It Works</h2>
+    
+    <div class="steps-container">
+
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Upload / Live Monitor</h3>
+            <p>User uploads video or starts live camera feed.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>AI Motion Detection</h3>
+            <p>System analyzes frames using intelligent motion detection.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Threat Classification</h3>
+            <p>Threat level is calculated based on confidence score.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">4</div>
+            <h3>Evidence & Logging</h3>
+            <p>Screenshot saved and incident logged in dashboard.</p>
+        </div>
+
+    </div>
+</section>
+<section class="screenshots">
+    <h2>Latest Detections</h2>
+
+    <div class="screenshot-container">
+        {% if latest_images %}
+            {% for img in latest_images %}
+                <div class="screenshot-card">
+                    <img src="{{ url_for('static', filename='results/frames/' + img) }}">
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No recent detections.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    MotionGuard © 2026 | Intelligent AI Surveillance System
+</footer>
+
+</body>
+</html>

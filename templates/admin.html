@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MotionGuard | Admin Control Center</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+        }
+
+        /* ---------- TOP NAVBAR ---------- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.5);
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .nav-buttons a {
+            margin-left: 15px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .live-btn { background: #dc2626; color: white; }
+        .live-btn:hover { background: #b91c1c; }
+
+        .report-btn { background: #2563eb; color: white; }
+        .report-btn:hover { background: #1d4ed8; }
+
+        .logout-btn { background: #374151; color: white; }
+        .logout-btn:hover { background: #1f2937; }
+
+        /* ---------- CONTENT ---------- */
+        .container { padding: 40px; }
+
+        /* ---------- STATS ---------- */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 220px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+            transition: 0.3s ease;
+        }
+
+        .card:hover { transform: translateY(-6px); }
+
+        .card h2 {
+            font-size: 34px;
+            margin: 10px 0;
+        }
+
+        .high { color: #ff4c4c; }
+        .medium { color: #ffae00; }
+        .low { color: #00ff99; }
+
+        /* ---------- CHARTS ---------- */
+        .charts {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .chart-box {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* ---------- TABLE ---------- */
+        h2 { margin-top: 60px; }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #111827;
+            padding: 14px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-top: 1px solid #334155;
+            text-align: center;
+        }
+
+        tr:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        img {
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h1>🛡 MotionGuard Admin Control Center</h1>
+    <div class="nav-buttons">
+        <a href="/live" class="live-btn">🎥 Live Monitor</a>
+        <a href="/download-report" class="report-btn">📄 Report</a>
+        <a href="/admin-logout" class="logout-btn">🚪 Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="card">
+            <h2>{{ total }}</h2>
+            <p>Total Incidents</p>
+        </div>
+        <div class="card">
+            <h2 class="high">{{ high }}</h2>
+            <p>High Threat</p>
+        </div>
+        <div class="card">
+            <h2 class="medium">{{ medium }}</h2>
+            <p>Medium Threat</p>
+        </div>
+        <div class="card">
+            <h2 class="low">{{ low }}</h2>
+            <p>Low Threat</p>
+        </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="charts">
+        <div class="chart-box">
+            <canvas id="pieChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <h2>📜 Incident History</h2>
+
+    <table>
+        <tr>
+            <th>Date & Time</th>
+            <th>Confidence</th>
+            <th>Threat Level</th>
+            <th>Evidence Frames</th>
+            <th>Screenshot</th>
+            <th>Delete</th>
+        </tr>
+
+        {% for i in incidents %}
+        {% set idx = loop.index0 %}
+        <tr>
+            <td>{{ i.timestamp }}</td>
+            <td>{{ i.confidence }}%</td>
+
+            <td>
+                {% set level = i.get('threat_level','LOW') %}
+                {% if level == "HIGH" %}
+                    <span class="high">🔴 HIGH</span>
+                {% elif level == "MEDIUM" %}
+                    <span class="medium">🟠 MEDIUM</span>
+                {% else %}
+                    <span class="low">🟢 LOW</span>
+                {% endif %}
+            </td>
+
+            <td>{{ i.evidence_count }}</td>
+
+            <td>
+                {% if i.get('image') %}
+                    <img src="{{ url_for('static', filename='results/frames/' + i.image) }}"
+                         width="120">
+                {% else %}
+                    No Image
+                {% endif %}
+            </td>
+            <td>
+    <a href="/delete-incident/{{ idx }}"
+       style="color:red; font-weight:bold; text-decoration:none;">
+       🗑 Delete
+    </a>
+</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+<script>
+    new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+            labels: ['High', 'Medium', 'Low'],
+            datasets: [{
+                data: [{{ high }}, {{ medium }}, {{ low }}],
+                backgroundColor: ['#ff4c4c', '#ffae00', '#00ff99']
+            }]
+        }
+    });
+
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ dates|tojson }},
+            datasets: [{
+                label: 'Incidents per Day',
+                data: {{ counts|tojson }},
+                backgroundColor: '#2563eb'
+            }]
+        }
+    });
+
+    // Auto refresh every 10 sec
+    setInterval(() => {
+        location.reload();
+    }, 10000);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Monitoring | MotionGuard</title>
+    <style>
+        body {
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            font-family: Arial;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-top: 10px;
+        }
+
+        .alert-banner {
+            display: none;
+            background: red;
+            color: white;
+            font-size: 22px;
+            padding: 15px;
+            animation: flash 1s infinite;
+            border-radius: 6px;
+        }
+
+        @keyframes flash {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        #statusIndicator {
+            margin-top: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        img {
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 25px red;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 20px;
+            background: #dc2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🛡 Live Motion Monitoring</h1>
+
+<div class="alert-banner" id="alertBox">
+    🚨 INTRUSION DETECTED 🚨
+</div>
+
+<div id="statusIndicator">
+    🟢 LIVE
+</div>
+
+<img src="{{ url_for('live_feed') }}" width="800">
+
+<br>
+
+<a href="/admin" class="btn">Stop & Return to Dashboard</a>
+
+<!-- Alarm sound -->
+<audio id="alarmSound" src="https://www.soundjay.com/buttons/sounds/beep-07.mp3"></audio>
+
+<script>
+let alertBox = document.getElementById("alertBox");
+let alarm = document.getElementById("alarmSound");
+let statusIndicator = document.getElementById("statusIndicator");
+
+let alertActive = false;
+
+setInterval(() => {
+    fetch("/check-latest-incident")
+    .then(res => res.json())
+    .then(data => {
+
+        if (data.threat === "HIGH") {
+
+            statusIndicator.innerHTML = "🔴 ALERT ACTIVE";
+            alertBox.style.display = "block";
+
+            if (!alertActive) {
+                alarm.play();
+                alertActive = true;
+            }
+
+        } else {
+
+            statusIndicator.innerHTML = "🟢 LIVE";
+            alertBox.style.display = "none";
+            alertActive = false;
+
+        }
+
+    });
+}, 3000);
+</script>
+
+</body>
+</html>

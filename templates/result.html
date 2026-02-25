@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MotionGuard | Detection Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background: #0f172a;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+            margin-bottom: 25px;
+        }
+
+        .success {
+            background: #064e3b;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .danger {
+            background: #7f1d1d;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            margin: 10px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        video, img {
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.6);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .details {
+            margin-top: 15px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Motion Detection Result</h2>
+
+    <div class="card">
+        {% if motion_detected %}
+            <div class="success">
+                ✅ Motion Detected — Confidence: {{ confidence }}%
+            </div>
+        {% else %}
+            <div class="danger">
+                ❌ No Significant Motion — Confidence: {{ confidence }}%
+            </div>
+        {% endif %}
+
+        {% if objects %}
+            <div class="details">
+                <strong>Detected Objects:</strong> {{ objects }}
+            </div>
+        {% endif %}
+
+        {% if age_gender %}
+            <div class="details">
+                <strong>Person Details:</strong> {{ age_gender }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h3>Uploaded Video</h3>
+        <img src="{{ url_for('video_feed') }}" width="700">
+    </div>
+
+    {% if images %}
+        <a href="/evidence" class="btn">View Evidence Frames</a>
+    {% endif %}
+<a href="/download-report" class="btn">Download Report (PDF)</a>
+    <a href="/" class="btn">Upload Another Video</a>
+    <p><strong>Threat Level:</strong> {{ threat_level }}</p>
+
+</div>
+
+</body>
+</html>

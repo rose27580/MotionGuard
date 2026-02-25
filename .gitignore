@@ -1,0 +1,30 @@
+# Virtual Environment
+newenv/
+
+# Datasets & Generated Data
+datasets/
+training_data/
+frames/
+processed_frames/
+extracted_frames/
+uploads/
+
+# Large files
+*.npy
+*.pth
+*.pt
+
+# Python cache
+__pycache__/
+*.pyc
+static/reports/
+*.pdf
+# Model weights
+*.h5
+*.caffemodel
+models/
+model/
+
+# Output videos
+*.mp4
+static/results/

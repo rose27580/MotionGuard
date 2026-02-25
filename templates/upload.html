@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Video | MotionGuard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 60px;
+            background-color: #0f172a;
+        }
+
+        .logo {
+            color: #38bdf8;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #38bdf8;
+        }
+
+        /* Center Section */
+        .upload-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 85vh;
+        }
+
+        .upload-card {
+            background: rgb(218, 217, 221);
+            width: 450px;
+            padding: 45px;
+            border-radius: 10px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .upload-card h2 {
+            margin-bottom: 10px;
+            color: #0f172a;
+        }
+
+        .upload-card p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        /* File Input */
+        .file-input {
+            margin-bottom: 25px;
+        }
+
+        .file-input input {
+            width: 100%;
+            padding: 10px;
+        }
+
+        /* Button */
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #38bdf8;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0ea5e9;
+        }
+
+        /* Back Link */
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #0f172a;
+            text-decoration: none;
+        }
+
+        .back:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">🛡 MotionGuard</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+        </div>
+    </div>
+
+    <div class="upload-wrapper">
+        <div class="upload-card">
+            <h2>Upload CCTV Footage</h2>
+            <p>Select a video file to analyze motion detection.</p>
+
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+
+                <div class="file-input">
+                    <input type="file" name="video" required>
+                </div>
+
+                <button type="submit" class="btn">
+                    Analyze Video
+                </button>
+
+            </form>
+
+            <a href="/" class="back">← Back to Home</a>
+        </div>
+    </div>
+
+</body>
+</html>
